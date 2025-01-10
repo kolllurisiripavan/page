@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.insider.com/636d138ff5877200181c4494?width=1000&format=jpeg&auto=webp');
+            background-size: cover;
+            background-position: center;
+            padding: 0;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2196f3;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+        }
+        button {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1976d2;
+        }
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        #dashboardButton {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #dashboardButton:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Vehicle Registration</h2>
+        <form id="vehicleForm">
+            <input type="text" id="vehicleName" placeholder="Vehicle Name" required>
+            <input type="text" id="vehicleModel" placeholder="Vehicle Model" required>
+            <input type="text" id="registrationNumber" placeholder="Registration Number" required>
+            <input type="number" id="batteryCapacity" placeholder="Battery Capacity (kWh)" required>
+            <button type="submit">Register Vehicle</button>
+        </form>
+
+        <table id="vehicleTable">
+            <thead>
+                <tr>
+                    <th>Vehicle Name</th>
+                    <th>Model</th>
+                    <th>Registration Number</th>
+                    <th>Battery Capacity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Vehicle registration data will be displayed here -->
+            </tbody>
+        </table>
+
+        <button id="dashboardButton" onclick="goToDashboard()">Go to Dashboard</button>
+    </div>
+
+    <script>
+        // Sample mock data for vehicles
+        let vehicleData = [];
+
+        // Handle form submission
+        document.getElementById('vehicleForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form reload
+
+            // Get form values
+            const vehicleName = document.getElementById('vehicleName').value.trim();
+            const vehicleModel = document.getElementById('vehicleModel').value.trim();
+            const registrationNumber = document.getElementById('registrationNumber').value.trim();
+            const batteryCapacity = document.getElementById('batteryCapacity').value.trim();
+
+            // Validate form fields
+            if (!vehicleName || !vehicleModel || !registrationNumber || isNaN(batteryCapacity)) {
+                alert('Please fill out all fields correctly.');
+                return;
+            }
+
+            // Add the vehicle to the mock data
+            vehicleData.push({
+                vehicle_name: vehicleName,
+                vehicle_model: vehicleModel,
+                registration_number: registrationNumber,
+                battery_capacity: parseFloat(batteryCapacity),
+            });
+
+            alert('Vehicle registered successfully!');
+            fetchVehicles(); // Reload the vehicle list
+        });
+
+        // Fetch and display vehicles
+        function fetchVehicles() {
+            const tableBody = document.querySelector('#vehicleTable tbody');
+            tableBody.innerHTML = ''; // Clear table
+
+            vehicleData.forEach(vehicle => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = vehicle.vehicle_name; // Vehicle Name
+                row.insertCell(1).textContent = vehicle.vehicle_model; // Model
+                row.insertCell(2).textContent = vehicle.registration_number; // Registration Number
+                row.insertCell(3).textContent = vehicle.battery_capacity; // Battery Capacity
+            });
+
+            // Show the "Go to Dashboard" button if vehicles exist
+            const dashboardButton = document.getElementById('dashboardButton');
+            dashboardButton.style.display = vehicleData.length > 0 ? 'block' : 'none';
+        }
+
+        // Redirect to the dashboard page
+        function goToDashboard() {
+            window.location.href = "dashboard.html"; // Replace with actual dashboard URL
+        }
+
+        // Call fetchVehicles on page load
+        fetchVehicles();
+    </script>
+</body>
+</html>

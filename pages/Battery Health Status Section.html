@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Battery Health</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+        label {
+            font-weight: bold;
+            color: #495057;
+            margin-top: 15px;
+        }
+        input {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            margin-top: 15px;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #d4edda;
+            color: #155724;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+        .sample-output {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predict Battery Health</h1>
+        <form id="batteryForm">
+            <label for="capacity">Capacity (mAh):</label>
+            <input type="number" id="capacity" required>
+            
+            <label for="cycle_count">Cycle Count:</label>
+            <input type="number" id="cycle_count" required>
+            
+            <label for="voltage">Voltage (V):</label>
+            <input type="number" id="voltage" step="any" required>
+            
+            <label for="temperature">Temperature (°C):</label>
+            <input type="number" id="temperature" step="any" required>
+            
+            <label for="resistance">Internal Resistance (mΩ):</label>
+            <input type="number" id="resistance" step="any" required>
+            
+            <button type="button" onclick="predictHealth()">Predict</button>
+        </form>
+        <div id="result" class="result"></div>
+
+        <div class="sample-output">
+            <h4>Sample Outputs:</h4>
+            <p><strong>Example 1:</strong> Capacity: 3000 mAh, Cycle Count: 500, Voltage: 3.7 V, Temperature: 25 °C, Resistance: 50 mΩ - <em>Health: Good</em></p>
+            <p><strong>Example 2:</strong> Capacity: 2500 mAh, Cycle Count: 800, Voltage: 3.6 V, Temperature: 30 °C, Resistance: 100 mΩ - <em>Health: Fair</em></p>
+            <p><strong>Example 3:</strong> Capacity: 2000 mAh, Cycle Count: 1200, Voltage: 3.5 V, Temperature: 35 °C, Resistance: 150 mΩ - <em>Health: Poor</em></p>
+        </div>
+
+        <button onclick="window.location.href='optimize_route.html'" class=" btn btn-secondary">Optimize Route</button>
+        <button onclick="window.location.href='dashboard.html'" class="btn btn-secondary">Go to Dashboard</button>
+    </div>
+
+    <script>
+        function predictHealth() {
+            // Get input values
+            const capacity = parseFloat(document.getElementById('capacity').value);
+            const cycleCount = parseInt(document.getElementById('cycle_count').value, 10);
+            const voltage = parseFloat(document.getElementById('voltage').value);
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const resistance = parseFloat(document.getElementById('resistance').value);
+
+            let prediction;
+
+            // Prediction logic
+            if (capacity >= 3000 && cycleCount <= 500 && voltage >= 3.7 && resistance <= 50 && temperature <= 25) {
+                prediction = "Health: Good";
+            } else if (capacity >= 2500 && cycleCount <= 800 && voltage >= 3.6 && resistance <= 100 && temperature <= 30) {
+                prediction = "Health: Fair";
+            } else {
+                prediction = "Health: Poor";
+            }
+
+            // Display result
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = "block";
+            resultDiv.textContent = prediction;
+
+            // Show alert message
+            alert(prediction);
+        }
+    </script>
+</body>
+</html>
